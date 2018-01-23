@@ -5,14 +5,10 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
 requirements = [
-    # TODO: put package requirements here
+    'numpy',
+    'deap',
+    'tqdm'
 ]
 
 setup_requirements = [
@@ -27,11 +23,10 @@ setup(
     name='scrabble_evo_autoencoder',
     version='0.1.0',
     description="Experiments using autoencoders to learn evolvable encodings for scrabble strings.",
-    long_description=readme + '\n\n' + history,
     author="Matthew Andres Moreno",
     author_email='mmore500@msu.edu',
     url='https://github.com/mmore500/scrabble_evo_autoencoder',
-    packages=find_packages(include=['scrabble_evo_autoencoder']),
+    packages=find_packages(include=['screvaut_evo']),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
