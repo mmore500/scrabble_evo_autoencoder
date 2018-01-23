@@ -14,6 +14,6 @@ def make_tb(p):
     tb.register("population", tools.initRepeat, list, tb.individual)
     tb.register("mutate", mutate, p['indpb'])
     tb.register("select", tools.selTournament, tournsize=3)
-    tb.register("evaluate", score)
+    tb.register("evaluate", score, p['cscore'])
 
     return tb

@@ -1,18 +1,18 @@
 import numpy as np
 
-from screvaut_evo.dat import VALID_CHARS, PS, CHAR_SCORE
+from screvaut_evo.dat import VALID_CHARS, PS
 from screvaut_evo import twl
 
 from deap import tools
 
 from tqdm import tqdm
 
-def score(scrastr):
+def score(cscore, scrastr):
     string = ''.join(scrastr)
     ws = string.split(' ')
 
     res = sum(
-            1
+            cscore[c]
             for w in ws
             for c in w
             if twl.check(w)

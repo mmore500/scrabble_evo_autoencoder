@@ -36,7 +36,7 @@ CHAR_FREQ = {
 PS = [CHAR_FREQ[x] for x in VALID_CHARS]
 
 
-CHAR_SCORE = {
+SCRABBLE_CHARACTER_SCORE = {
         'a' : 1,
         'b' : 3,
         'c' : 3,
@@ -66,11 +66,42 @@ CHAR_SCORE = {
         ' ' : 0
     }
 
+LETTER_CHARACTER_SCORE = {
+        'a' : 1,
+        'b' : 1,
+        'c' : 1,
+        'd' : 1,
+        'e' : 1,
+        'f' : 1,
+        'g' : 1,
+        'h' : 1,
+        'i' : 1,
+        'j' : 1,
+        'k' : 1,
+        'l' : 1,
+        'm' : 1,
+        'n' : 1,
+        'o' : 1,
+        'p' : 1,
+        'q' : 1,
+        'r' : 1,
+        's' : 1,
+        't' : 1,
+        'u' : 1,
+        'v' : 1,
+        'w' : 1,
+        'x' : 1,
+        'y' : 1,
+        'z' : 1,
+        ' ' : 0
+    }
+
 STDPARAM = {
         'indpb' : 0.1,
         'mutpb' : 0.2,
         'npop' : 50,
         'ngen' : 500,
         'indsize' : 100,
-        'nhof' : 1
+        'nhof' : 1,
+        'cscore' : LETTER_CHARACTER_SCORE
     }
