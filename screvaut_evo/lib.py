@@ -1,6 +1,6 @@
 import numpy as np
 
-from screvaut_evo.dat import VALID_CHARS, PS
+from screvaut_evo.dat import VALID_CHARS, PS, CHAR_FREQ
 from screvaut_evo import twl
 
 from deap import tools
@@ -30,7 +30,9 @@ def mutate(indpb, ind):
     idxs = np.random.choice(len(ind), nmut)
 
     for idx in idxs:
-        ind[idx] = draw_char()
+        # don't change padding 0's on learning data
+        if ind[idx] in CHAR_FREQ:
+            ind[idx] = draw_char()
 
     return ind
 
