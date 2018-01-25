@@ -35,6 +35,7 @@ CHAR_FREQ = {
 
 PS = [CHAR_FREQ[x] for x in VALID_CHARS]
 
+CHAR_IDX = {c : i for (i, c) in enumerate(VALID_CHARS)}
 
 SCRABBLE_CHARACTER_SCORE = {
         'a' : 1,
