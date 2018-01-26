@@ -26,7 +26,7 @@ class Model1(nn.Module):
             )
 
         self.dodropout = dropout
-        self.dropouts = [nn.Dropout(p=(dropout or 0) for __ in self.cnnlayers]
+        self.dropouts = [nn.Dropout(p=(dropout or 0)) for __ in self.cnnlayers]
 
     def forward(self, x):
 

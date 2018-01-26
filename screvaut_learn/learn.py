@@ -2,6 +2,7 @@ import torch
 from torch.autograd import Variable
 import itertools
 import time
+import json
 
 from screvaut_evo.dat import VALID_CHARS
 
@@ -11,6 +12,8 @@ from screvaut_learn.dat import DEFAULT_LEARN_PARAMS
 def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEARN_PARAMS, nepochs=None):
 
     start = time.time()
+
+    record = list()
 
     if p['cuda']:
         model.cuda()
@@ -57,6 +60,15 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
                     print('Epoch [%d], Iter [%d/%d], Time %s, Train Loss: %.4f, Test Loss: %.4f, Test Performance: %.4f'
                            %(epoch+1, i+1, len(train_loader)//train_loss.data.size(0), timeSince(start), train_loss.data[0], test_loss.data[0], correct/total))
 
+                    record.append({
+                        'epoch' : epoch+1,
+                        'iter' : i+1,
+                        'train_loss' : train_loss.data[0],
+                        'test_loss' : test_loss.data[0],
+                        'test_performance' : correct/total
+                        })
+                    json.dump(record, open('record.json', 'w'))
+
                     question_strings = tensor2strings(questions.data)
                     answer_strings = [str(VALID_CHARS[int(a.data[0])]) for a in answers]
                     guess_strings = tensor2strings(outputs.view(-1,len(VALID_CHARS),1).data)
@@ -64,7 +76,7 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
                     for q, a, g in itertools.islice(zip(question_strings, answer_strings, guess_strings), p['examples_per']):
                         mark = '✓' if g == a else '✗ (%s)' % a
                         print('=' * 30)
-                        print('          ' + ' ' * (len(q)//2) +  '|')
+                        print(' ' * (len(q)//2+10) +  '|')
 
                         print('question: %s' % q)
                         print('guess: %s %s' % (g, mark))
@@ -80,4 +92,4 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
         print('Checkpointing model...')
         torch.save(model, 'model.pt')
 
-    return model
+    return model, record
