@@ -4,7 +4,7 @@ from screvaut_evo.dat import VALID_CHARS
 
 class Model1(nn.Module):
 
-    def __init__(self, channel_counts, kernel_sizes, input_length):
+    def __init__(self, channel_counts, kernel_sizes, input_length, dropout=None):
         super(Model1, self).__init__()
 
         for k in kernel_sizes:
@@ -16,7 +16,6 @@ class Model1(nn.Module):
         self.cnnlayers = [
             nn.Sequential(
                 nn.Conv1d(i, o, k, padding=k//2),
-                nn.Dropout()
                 nn.Tanh(),
             ) for (i, o), k in zip(ios, kernel_sizes)]
 
@@ -26,10 +25,15 @@ class Model1(nn.Module):
                 nn.Linear(input_length*channel_counts[-1], len(VALID_CHARS))
             )
 
+        self.dodropout = dropout
+        self.dropouts = [nn.Dropout(p=(dropout or 0) for __ in self.cnnlayers]
+
     def forward(self, x):
 
-        for lay in self.cnnlayers:
+        for lay, d in zip(self.cnnlayers, self.dropouts):
             x = lay(x)
+            if self.dodropout:
+                x = d(x)
 
         x = self.linlayer(x.view(x.size(0), -1))
 
