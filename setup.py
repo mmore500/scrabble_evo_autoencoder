@@ -26,7 +26,7 @@ setup(
     author="Matthew Andres Moreno",
     author_email='mmore500@msu.edu',
     url='https://github.com/mmore500/scrabble_evo_autoencoder',
-    packages=find_packages(include=['screvaut_evo']),
+    packages=find_packages(include=['screvaut_evo', 'screvaut_learn']),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",

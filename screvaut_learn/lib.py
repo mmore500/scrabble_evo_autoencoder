@@ -1,4 +1,6 @@
 import torch
+import time
+import math
 from screvaut_evo.dat import CHAR_IDX, VALID_CHARS
 
 # source:
@@ -30,3 +32,10 @@ def tensor2strings(tensor):
                 ) for idxs, in idxss.tolist()]
 
     return strings
+
+def timeSince(since):
+    now = time.time()
+    s = now - since
+    m = math.floor(s / 60)
+    s -= m * 60
+    return '%dm %ds' % (m, s)

@@ -1,7 +1,9 @@
 import torch
-from torch.utils.data as data_utils
+import torch.utils.data as data_utils
 
 from screvaut_learn.lib import strings2tensor
+from screvaut_evo.dat import CHAR_IDX
+from tqdm import tqdm
 
 import sys
 import json
@@ -15,10 +17,10 @@ with open("questions_answers.json", 'r') as f:
     questions_answers = json.load(f)
 
 
-features = strings2tensor([q for q, __ in questions_answers]
+features = strings2tensor([q for q, __ in tqdm(questions_answers)])
 
 # we just want the net to predict the middle char of the string
-targets = strings2tensor([str(a[len(a)//2]) for __, a in questions_answers])
+targets = torch.IntTensor([CHAR_IDX[a[len(a)//2]] for __, a in tqdm(questions_answers)])
 
 # source:
 # https://stackoverflow.com/questions/41924453/pytorch-how-to-use-dataloaders-for-custom-datasets
