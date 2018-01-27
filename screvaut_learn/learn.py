@@ -15,21 +15,17 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
 
     record = list()
 
-    if p['cuda']:
-        model.cuda()
-
     # Train the Model
     model.train()
     try:
 
         for epoch in (nepochs or itertools.count()):
             for i, (questions, answers) in enumerate(train_loader):
-                questions = Variable(questions).float()
-                answers = Variable(answers).long()
-
                 if p['cuda']:
                     questions, answers = questions.cuda(), answers.cuda()
 
+                questions = Variable(questions).float()
+                answers = Variable(answers).long()
                 # Forward + Backward + Optimize
                 optimizer.zero_grad()
                 outputs = model(questions)
@@ -39,11 +35,17 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
 
                 print('.', end="")
 
+                del questions
+                del answers
+                torch.cuda.empty_cache()
+               		
+
                 if (i+1) % p['print_every'] == 0:
                     model.eval()
 
                     # evaluate on test data
                     questions, answers = next(test_loader.__iter__())
+
                     if p['cuda']:
                         questions, answers = questions.cuda(), answers.cuda()
 
@@ -80,6 +82,11 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
 
                         print('question: %s' % q)
                         print('guess: %s %s' % (g, mark))
+
+
+                    del questions
+                    del answers
+                    torch.cuda.empty_cache()
 
                     model.train()
 
