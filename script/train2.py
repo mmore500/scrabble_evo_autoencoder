@@ -13,11 +13,11 @@ cuda = 'true' in sys.argv[1]
 print("Cuda set to %r" % cuda)
 
 p = DEFAULT_LEARN_PARAMS
-p['print_every'] = 20
+p['print_every'] = 50
 p['cuda'] = cuda
-p['dropout'] = 0.25
+p['dropout'] = None
 
-learning_rate = 0.007
+learning_rate = 0.003
 
 print("loading loaders")
 train = torch.load("train_loader.pt")
@@ -25,7 +25,7 @@ test = torch.load("test_loader.pt")
 print("done")
 
 print("making model")
-model = Model2([8000,2000,1000,500], [5,3,3,3], 15)
+model = Model2([12000,3000,800], [5,3,3], 15)
 print("done")
 
 print("criterion")
@@ -46,4 +46,4 @@ print("leaving learn")
 
 torch.save(model, 'model.pt')
 
-json.dump(records, open('records.json', 'w'))
+json.dump(records, open('record.json', 'w'))
