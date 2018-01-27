@@ -16,7 +16,7 @@ p = DEFAULT_LEARN_PARAMS
 p['print_every'] = 10
 p['cuda'] = cuda
 
-learning_rate = 0.005
+learning_rate = 0.01
 
 print("loading loaders")
 train = torch.load("train_loader.pt")
@@ -24,7 +24,7 @@ test = torch.load("test_loader.pt")
 print("done")
 
 print("making model")
-model = Model1([2000,1000],[3,3], 15)
+model = Model1([3000,100,100], [3,3], 15)
 print("done")
 
 print("criterion")
@@ -43,6 +43,6 @@ print("entering learn")
 model, records = learn(model, train, test, criterion, optimizer, p=p)
 print("leaving learn")
 
-torch.save(model, open('model.pt', 'w'))
+torch.save(model, 'model.pt')
 
 json.dump(records, open('records.json', 'w'))
