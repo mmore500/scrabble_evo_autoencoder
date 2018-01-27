@@ -24,7 +24,7 @@ test = torch.load("test_loader.pt")
 print("done")
 
 print("making model")
-model = Model1([3000,100,100], [3,3], 15)
+model = Model1([3000,100,100], [3,3,3], 15)
 print("done")
 
 print("criterion")
