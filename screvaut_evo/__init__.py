@@ -4,4 +4,4 @@
 
 __author__ = """Matthew Andres Moreno"""
 __email__ = 'mmore500@msu.edu'
-__version__ = '0.5.1'
+__version__ = '0.5.2'
