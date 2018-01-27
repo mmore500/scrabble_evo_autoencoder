@@ -35,10 +35,10 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
 
                 print('.', end="")
 
-                del questions
-                del answers
-                torch.cuda.empty_cache()
-               		
+                if p['cuda']:
+                    del questions
+                    del answers
+                    torch.cuda.empty_cache()
 
                 if (i+1) % p['print_every'] == 0:
                     model.eval()
@@ -83,10 +83,10 @@ def learn(model, train_loader, test_loader, criterion, optimizer, p=DEFAULT_LEAR
                         print('question: %s' % q)
                         print('guess: %s %s' % (g, mark))
 
-
-                    del questions
-                    del answers
-                    torch.cuda.empty_cache()
+                    if p['cuda']:
+                        del questions
+                        del answers
+                        torch.cuda.empty_cache()
 
                     model.train()
 

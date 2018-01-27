@@ -27,6 +27,11 @@ class Model1(nn.Module):
             )
 
 
+        for m in self.modules():
+            if isinstance(m, nn.Conv1d) or isinstance(m, nn.Linear):
+                m.weight.data.normal_(0.0, 1)
+
+
     def forward(self, x):
 
         x = self.cnnlayer(x)
