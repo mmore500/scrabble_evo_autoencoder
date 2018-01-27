@@ -8,8 +8,7 @@ from setuptools import setup, find_packages
 requirements = [
     'numpy',
     'deap',
-    'tqdm',
-    'pytorch'
+    'tqdm'
 ]
 
 setup_requirements = [
