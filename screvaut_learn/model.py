@@ -13,11 +13,12 @@ class Model1(nn.Module):
 
         ios = zip([len(VALID_CHARS)] + channel_counts, channel_counts)
 
-        self.cnnlayers = [
-            nn.Sequential(
-                nn.Conv1d(i, o, k, padding=k//2),
-                nn.Tanh(),
-            ) for (i, o), k in zip(ios, kernel_sizes)]
+        lays = [
+                lay for (i, o), k in zip(ios, kernel_sizes) for lay in (nn.Conv1d(i, o, k, padding=k//2), nn.Tanh(), nn.Droput(p=dropout) if dropout else nn.Conv1d(i, o, k, padding=k//2), nn.Tanh())
+            ]
+
+
+        self.cnnlayer = nn.Sequential(*lays)
 
         self.linlayer = nn.Sequential(
                 nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]),
@@ -25,16 +26,10 @@ class Model1(nn.Module):
                 nn.Linear(input_length*channel_counts[-1], len(VALID_CHARS))
             )
 
-        self.dodropout = dropout
-        self.dropouts = [nn.Dropout(p=(dropout or 0)) for __ in self.cnnlayers]
 
     def forward(self, x):
 
-        for lay, d in zip(self.cnnlayers, self.dropouts):
-            x = lay(x)
-            if self.dodropout:
-                x = d(x)
-
+        x = self.cnnlayer(x)
         x = self.linlayer(x.view(x.size(0), -1))
 
         return x
