@@ -26,6 +26,6 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 model, records = learn(model, train, test, criterion, optimizer, p=p)
 
-torch.save(model, open('model.pt', 'w))
+torch.save(model, open('model.pt', 'w'))
 
 json.dump(records, open('records.json', 'w'))
