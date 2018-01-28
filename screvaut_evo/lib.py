@@ -12,7 +12,7 @@ def score(cscore, scrastr):
     ws = string.split(' ')
 
     res = sum(
-            sum(cscore[c] for c in w) ** 3
+            max(1, abs(2-len(w))) ** 3
             for w in ws
             if twl.check(w)
         )
