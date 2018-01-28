@@ -12,7 +12,7 @@ model = Model1([3000,100,100], [3,3,3], 15)
 model.load_state_dict(torch.load('model2.pt'))
 model.eval()
 
-reps = 2
+reps = 1
 
 view = 15
 
@@ -44,22 +44,18 @@ def gpmap(xs):
     return xs
 
 p = STDPARAM
-p['ngen'] = 500
+p['ngen'] = 40000
 p['gpmap'] = gpmap
 tb = make_tb(p)
 
 if __name__ == '__main__':
-
-    xs = list(gpmap([[c for c in "nlcwotdsciuicv pt yuwaeres aioae  icrmc fdm drtgt valregd  eyais  mop ognaay yotort rroao  ew  uaopv"]]))
-
-    print(''.join(xs[0]))
 
     res = evorun(tb, p)
 
     logbook = res['logbook']
 
     print(json.dumps(''.join(res['hof'][0])))
-    print(json.dumps(res['hof'][0].fitness.values))
+    print(json.dumps(''.join(gmap([res['hof'][0]])[0])))
 
     import matplotlib.pyplot as plt
 
