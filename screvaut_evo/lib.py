@@ -60,31 +60,37 @@ def evorun(tb, p):
     for ind, fit in zip(pop, fitnesses):
         ind.fitness.values = fit
 
-    for g in tqdm(range(p['ngen'])):
-        # Select the next generation individuals
-        offspring = tb.select(pop, len(pop))
-        # Clone the selected individuals
-        offspring = list(map(tb.clone, offspring))
+    try:
+        for g in tqdm(range(p['ngen'])):
+            # Select the next generation individuals
+            offspring = tb.select(pop, len(pop))
+            # Clone the selected individuals
+            offspring = list(map(tb.clone, offspring))
 
-        # Apply mutation to offspring
-        for mutant in offspring:
-            if np.random.random() < p['mutpb']:
-                tb.mutate(mutant)
-                del mutant.fitness.values
+            # Apply mutation to offspring
+            for mutant in offspring:
+                if np.random.random() < p['mutpb']:
+                    tb.mutate(mutant)
+                    del mutant.fitness.values
 
-        # Evaluate the individuals with an invalid fitness
-        invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        fitnesses = map(tb.evaluate, invalid_ind)
-        for ind, fit in zip(invalid_ind, fitnesses):
-            ind.fitness.values = fit
+            # Evaluate the individuals with an invalid fitness
+            invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+            invalid_phen = p['gpmap'](invalid_ind)
+            fitnesses = map(tb.evaluate, invalid_phen)
+            for ind, fit in zip(invalid_ind, fitnesses):
+                ind.fitness.values = fit
 
-        # The population is entirely replaced by the offspring
-        pop[:] = offspring
+            # The population is entirely replaced by the offspring
+            pop[:] = offspring
 
-        # Record data
-        hof.update(pop)
-        record = stats.compile(pop)
-        logbook.record(gen=g, **record)
+            # Record data
+            hof.update(pop)
+            print(hof[0].fitness.values[0])
+            record = stats.compile(pop)
+            logbook.record(gen=g, **record)
+
+    except KeyboardInterrupt:
+        print("interrupted")
 
     return {
             'pop' : pop,

@@ -97,6 +97,9 @@ LETTER_CHARACTER_SCORE = {
         ' ' : 0
     }
 
+def id(x):
+    return x
+
 STDPARAM = {
         'indpb' : 0.1,
         'mutpb' : 0.2,
@@ -104,5 +107,6 @@ STDPARAM = {
         'ngen' : 500,
         'indsize' : 100,
         'nhof' : 1,
-        'cscore' : LETTER_CHARACTER_SCORE
+        'cscore' : LETTER_CHARACTER_SCORE,
+        'gpmap' : id
     }

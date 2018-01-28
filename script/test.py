@@ -5,7 +5,7 @@ from screvaut_evo.lib import evorun
 import os
 
 p = STDPARAM
-p['ngen'] = 10
+p['ngen'] = 500
 tb = make_tb(p)
 
 res = evorun(tb, p)
