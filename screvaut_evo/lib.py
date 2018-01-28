@@ -12,7 +12,7 @@ def score(cscore, scrastr):
     ws = string.split(' ')
 
     res = sum(
-            1 for w in ws
+            max(1, 10 - 5 *abs(len(w) - 3)) for w in ws
             if twl.check(w) and len(w) > 1
         )
 
