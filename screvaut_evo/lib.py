@@ -12,9 +12,8 @@ def score(cscore, scrastr):
     ws = string.split(' ')
 
     res = sum(
-            cscore[c]
+            sum(cscore[c] for c in w) ** 3
             for w in ws
-            for c in w
             if twl.check(w)
         )
 
