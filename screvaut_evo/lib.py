@@ -12,9 +12,8 @@ def score(cscore, scrastr):
     ws = string.split(' ')
 
     res = sum(
-            max(1, abs(2-len(w))) ** 3
-            for w in ws
-            if twl.check(w)
+            1 for w in ws
+            if twl.check(w) and len(w) > 1
         )
 
     return res,
