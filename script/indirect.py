@@ -12,7 +12,7 @@ model = Model1([3000,100,100], [3,3,3], 15)
 model.load_state_dict(torch.load('model2.pt'))
 model.eval()
 
-reps = 1
+reps = 4
 
 view = 15
 
@@ -45,6 +45,8 @@ def gpmap(xs):
 
 p = STDPARAM
 p['ngen'] = 40000
+p['mutpb'] = 0.4
+p['indpb'] = 0.01
 p['gpmap'] = gpmap
 tb = make_tb(p)
 
