@@ -58,12 +58,13 @@ class Model2(nn.Module):
         self.cnnlayer = nn.Sequential(*lays)
 
         self.linlayer = nn.Sequential(
-                nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]//VALID_CHARS),
+                nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]),
                 nn.ReLU(),
-                nn.Linear(input_length*channel_counts[-1]), len(VALID_CHARS))
+                nn.Dropout(p=dropout),
+                nn.Linear(input_length*channel_counts[-1]), len(VALID_CHARS)
             ) if dropout else nn.Sequential(
                 nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]),
-                nn.Tanh(),
+                nn.ReLU(),
                 nn.Linear(input_length*channel_counts[-1], len(VALID_CHARS))
             )
 
