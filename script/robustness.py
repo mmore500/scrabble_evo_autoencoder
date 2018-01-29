@@ -53,8 +53,8 @@ def gpmap(x):
 def make_run_res(__):
     run_res = []
 
-champ = [c for c in scrastr]
-originalindirectphen = list(gpmap(curchamp))
+    champ = [c for c in scrastr]
+    originalindirectphen = list(gpmap(curchamp))
 
     curchamp = [c for c in scrastr]
 
