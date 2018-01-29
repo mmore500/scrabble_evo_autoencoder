@@ -12,7 +12,7 @@
 ### Combine and redirect output/error logs
 #PBS -j oe
 ### Setup multiple replicates
-#PBS -t 0-99
+#PBS -t 0-249
 
 # load virtual environment
 cd ~
