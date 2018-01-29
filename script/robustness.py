@@ -26,7 +26,8 @@ model_filename = sys.argv[2]
 out_filename = sys.argv[3]
 
 # settings shouldn't matter to load from file
-model = Model2([100,100], [5,3], 15)
+# lies: this does matter
+model = Model2([9000,100], [3,4], 15)
 model.load_state_dict(torch.load(model_filename))
 model.eval()
 
