@@ -51,16 +51,16 @@ class Model2(nn.Module):
         ios = zip([len(VALID_CHARS)] + channel_counts, channel_counts)
 
         lays = [
-                lay for (i, o), k in zip(ios, kernel_sizes) for lay in (nn.Conv1d(i, o, k, padding=k//2), nn.ReLU())
+                lay for (i, o), k in zip(ios, kernel_sizes) for lay in (nn.Conv1d(i, o, k, padding=k//2), nn.Tanh())
             ]
 
 
         self.cnnlayer = nn.Sequential(*lays)
 
         self.linlayer = nn.Sequential(
-                nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]),
-                nn.Tanh(),
-                nn.Linear(input_length*channel_counts[-1], len(VALID_CHARS))
+                nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]//VALID_CHARS),
+                nn.ReLU(),
+                nn.Linear(input_length*channel_counts[-1]), len(VALID_CHARS))
             ) if dropout else nn.Sequential(
                 nn.Linear(input_length*channel_counts[-1], input_length*channel_counts[-1]),
                 nn.Tanh(),
@@ -69,7 +69,7 @@ class Model2(nn.Module):
 
         for m in self.modules():
             if isinstance(m, nn.Conv1d) or isinstance(m, nn.Linear):
-                m.weight.data.normal_(0.0, 0.1)
+                m.weight.data.normal_(0.0, 1.0)
 
 
     def forward(self, x):
