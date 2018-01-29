@@ -62,14 +62,28 @@ direct_rel_fit_mean_by_step = [np.mean(t) for t in direct_rel_fits_by_step]
 direct_rel_fit_std_by_step = np.array([np.std(t) for t in direct_rel_fits_by_step])
 
 fig, ax1 = plt.subplots()
-line1 = ax1.errorbar(range(len(indirect_rel_fit_mean_by_step)), indirect_rel_fit_mean_by_step, yerr=indirect_rel_fit_std_by_step*2/np.sqrt(len(filenames)), c='b')
-line2 = ax1.errorbar(range(len(direct_rel_fit_mean_by_step)), direct_rel_fit_mean_by_step, yerr=direct_rel_fit_std_by_step*2/np.sqrt(len(filenames)), c='r')
+line1 = ax1.errorbar(
+        range(len(indirect_rel_fit_mean_by_step)),
+        indirect_rel_fit_mean_by_step,
+        yerr=indirect_rel_fit_std_by_step*2/np.sqrt(len(filenames)),
+        c='b',
+        label="Indirect Encoding"
+    )
+line2 = ax1.errorbar(range(len(direct_rel_fit_mean_by_step)),
+        direct_rel_fit_mean_by_step,
+        yerr=direct_rel_fit_std_by_step*2/np.sqrt(len(filenames)),
+        c='r',
+        label="Direct Encoding"
+    )
+ax1.set_ylabel("Relative Fitness")
+ax1.set_xlabel("Mutational Step")
+
+ax1.legend(handles=[line1, line2])
 
 plt.show()
 
 
-
-# plot fitness versus mutational step
+# plot distance versus mutational step
 indirect_dists_by_step = [[d['indirect_dist'] for d in t] for t in dictlist]
 indirect_dist_mean_by_step = [np.mean(t) for t in indirect_dists_by_step]
 indirect_dist_std_by_step = np.array([np.std(t) for t in indirect_dists_by_step])
@@ -79,7 +93,24 @@ direct_dist_mean_by_step = [np.mean(t) for t in direct_dists_by_step]
 direct_dist_std_by_step = np.array([np.std(t) for t in direct_dists_by_step])
 
 fig, ax1 = plt.subplots()
-line1 = ax1.errorbar(range(len(indirect_dist_mean_by_step)), indirect_dist_mean_by_step, yerr=indirect_dist_std_by_step*2/np.sqrt(len(filenames)), c='b')
-line2 = ax1.errorbar(range(len(direct_dist_mean_by_step)), direct_dist_mean_by_step, yerr=direct_dist_std_by_step*2/np.sqrt(len(filenames)), c='r')
+line1 = ax1.errorbar(
+        range(len(indirect_dist_mean_by_step)),
+        indirect_dist_mean_by_step,
+        yerr=indirect_dist_std_by_step*2/np.sqrt(len(filenames)),
+        c='b',
+        label="Indirect Encoding"
+    )
+line2 = ax1.errorbar(
+        range(len(direct_dist_mean_by_step)),
+        direct_dist_mean_by_step,
+        yerr=direct_dist_std_by_step*2/np.sqrt(len(filenames)),
+        c='r',
+        label="Direct Encoding"
+    )
+
+ax1.set_ylabel("Phenotypic Distance")
+ax1.set_xlabel("Mutational Step")
+
+ax1.legend(handles=[line1, line2])
 
 plt.show()
