@@ -21,7 +21,7 @@ test_requirements = [
 
 setup(
     name='scrabble_evo_autoencoder',
-    version='0.9.1',
+    version='0.9.2',
     description="Experiments using autoencoders to learn evolvable encodings for scrabble strings.",
     author="Matthew Andres Moreno",
     author_email='mmore500@msu.edu',
