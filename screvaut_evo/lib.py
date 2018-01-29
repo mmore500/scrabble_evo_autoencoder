@@ -1,19 +1,24 @@
 import numpy as np
 
-from screvaut_evo.dat import VALID_CHARS, PS, CHAR_FREQ
+from screvaut_evo.dat import VALID_CHARS, PS, CHAR_FREQ, LETTER_CHARACTER_SCORE
 from screvaut_evo import twl
+from screvaut_learn.lib import strings2tensor, tensor2strings
 
 from deap import tools
 
 from tqdm import tqdm
+
+from torch.autograd import Variable
 
 def score(cscore, scrastr):
     string = ''.join(scrastr)
     ws = string.split(' ')
 
     res = sum(
-            max(1, 10 - 5 *abs(len(w) - 3)) for w in ws
-            if twl.check(w) and len(w) > 1
+            LETTER_CHARACTER_SCORE[c]
+            for w in ws
+            for c in w
+            if twl.check(w)
         )
 
     return res,
@@ -25,6 +30,10 @@ def draw_char():
 def mutate(indpb, ind):
 
     nmut = np.random.binomial(len(ind), indpb)
+
+    return perform_mut(nmut, ind)
+
+def perform_mut(nmut, ind):
     idxs = np.random.choice(len(ind), nmut)
 
     for idx in idxs:
@@ -33,6 +42,33 @@ def mutate(indpb, ind):
             ind[idx] = draw_char()
 
     return ind
+
+def clean(x, model, view):
+
+    # number of characterw viewed on left/right of center character
+    view_one_side = (view - 1) // 2
+
+
+    # 0 0 a b c d e f g 0 0
+    padded = ['0'] * view_one_side + x + ['0'] * view_one_side
+
+    # 0 0 a b c ..., 0 a b c ..., a b c ..., etc.
+    zlist = [padded[i:] for i in range(view)]
+
+    # "00a", "0abc, "abc", etc.
+    x = [''.join(t) for t in zip(*zlist)]
+
+    x = [''.join(l) for l in x]
+
+    x = model(Variable(strings2tensor(x)))
+
+    x = [c for s in tensor2strings(x.view(-1,len(VALID_CHARS),1).data) for c in s]
+
+    return x
+
+def scrastr_phen_dist(a,b):
+    return len(a) - sum(1 for c,d in zip(a,b) if c == d)
+
 
 def evorun(tb, p):
 

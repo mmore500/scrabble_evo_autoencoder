@@ -1,0 +1,27 @@
+#!/bin/bash --login
+
+### Define Resources needed:
+#PBS -l walltime=03:45:00
+#PBS -l mem=20gb
+#PBS -l nodes=3:ppn=8
+### Name job
+#PBS -N screvaut_direct
+### Email stuff
+#PBS -M mmore500@msu.edu
+#PBS -m abe
+### Combine and redirect output/error logs
+#PBS -j oe
+### Setup multiple replicates
+#PBS -t 0-99
+
+# load virtual environment
+cd ~
+source myPy/bin/activate
+
+# move to experimental directory
+cd /mnt/scratch/mmore500/screvaut/direct
+
+# run experiment
+python ~/scrabble_evo_autoencoder/script/robustness.py /mnt/scratch/mmore500/screvaut/indirect/model2.pt /mnt/scratch/mmore500/screvaut/direct/${PBS_ARRAYID}.json /mnt/scratch/mmore500/screvaut/robustness/${PBS_ARRAYID}-robustness.json
+
+qstat -f ${PBS_JOBID}
