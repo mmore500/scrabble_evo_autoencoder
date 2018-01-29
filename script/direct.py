@@ -6,6 +6,9 @@ import json
 
 p = STDPARAM
 p['ngen'] = 40000
+p['mutpb'] = 0.4
+p['indpb'] = 0.01
+
 tb = make_tb(p)
 
 res = evorun(tb, p)
