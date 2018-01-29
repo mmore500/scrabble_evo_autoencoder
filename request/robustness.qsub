@@ -22,6 +22,6 @@ source myPy/bin/activate
 cd /mnt/scratch/mmore500/screvaut/direct
 
 # run experiment
-python ~/scrabble_evo_autoencoder/script/robustness.py  /mnt/scratch/mmore500/screvaut/direct/${PBS_ARRAYID}.json /mnt/scratch/mmore500/screvaut/indirect/model2.pt /mnt/scratch/mmore500/screvaut/robustness/${PBS_ARRAYID}-robustness.json
+python ~/scrabble_evo_autoencoder/script/robustness.py  /mnt/scratch/mmore500/screvaut/direct/${PBS_ARRAYID}.json /mnt/scratch/mmore500/screvaut/indirect/model3.pt /mnt/scratch/mmore500/screvaut/robustness/${PBS_ARRAYID}-robustness.json
 
 qstat -f ${PBS_JOBID}
