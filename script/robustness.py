@@ -41,8 +41,6 @@ with open(json_filename, 'r') as f:
         else:
             print("fail: invalid scrastr for " + json_filename)
 
-champ = [c for c in scrastr]
-
 
 def myclean(x):
     return clean(x, model, view)
@@ -54,6 +52,9 @@ def gpmap(x):
 
 def make_run_res(__):
     run_res = []
+
+champ = [c for c in scrastr]
+originalindirectphen = list(gpmap(curchamp))
 
     curchamp = [c for c in scrastr]
 
@@ -67,6 +68,7 @@ def make_run_res(__):
         rdict['indirect_fit'] = score(LETTER_CHARACTER_SCORE ,indirect_phen)[0]
         rdict['direct_fit'] = score(LETTER_CHARACTER_SCORE, direct_phen)[0]
         rdict['indirect_dist'] = scrastr_phen_dist(champ, indirect_phen)
+        rdict['indirect_rel_dist'] = scrastr_phen_dist(originalindirectphen, indirect_phen)
         rdict['direct_dist'] = scrastr_phen_dist(champ, direct_phen)
 
         curchamp = perform_mut(1, curchamp)
