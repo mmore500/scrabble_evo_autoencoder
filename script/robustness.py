@@ -2,7 +2,7 @@ from screvaut_evo.tb import make_tb
 from screvaut_evo.dat import STDPARAM, VALID_CHARS, LETTER_CHARACTER_SCORE
 from screvaut_evo.lib import score, perform_mut, clean, scrastr_phen_dist
 from screvaut_learn.lib import strings2tensor, tensor2strings
-from screvaut_learn.model import Model1
+from screvaut_learn.model import Model1, Model2
 from tqdm import tqdm
 import torch
 from torch.autograd import Variable
