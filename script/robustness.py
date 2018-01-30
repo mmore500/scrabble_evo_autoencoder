@@ -12,7 +12,7 @@ import sys
 import os
 
 clean_reps = 4
-mut_run_reps = 50
+mut_run_reps = 25
 num_muts = 100
 view = 15
 
