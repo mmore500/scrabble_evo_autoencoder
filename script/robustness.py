@@ -56,7 +56,7 @@ def make_run_res(__):
     run_res = []
 
     champ = [c for c in scrastr]
-    originalindirectphen = list(gpmap(curchamp))
+    originalindirectphen = list(gpmap(champ))
 
     curchamp = [c for c in scrastr]
 
