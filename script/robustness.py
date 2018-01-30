@@ -85,7 +85,5 @@ if __name__ == '__main__':
 
     res = list(futures.map(make_run_res, range(mut_run_reps)))
 
-    print(res)
-
     with open(out_filename, 'w') as f:
         json.dump(res, f)
