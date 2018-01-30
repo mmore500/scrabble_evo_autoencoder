@@ -4,15 +4,30 @@ from screvaut_evo.lib import evorun
 
 import json
 
+# number of generations as first argument
+ngen = sys.argv[1]
+
+# filename to save res (logbook, hof)
+# optional
+resfilename = sys.argv[2] if len(sys.argv > 2) else None
+
+res_save = 'true' in .lower()
+
 p = STDPARAM
-p['ngen'] = 40000
-p['mutpb'] = 0.4
+p['ngen'] = ngen
+p['mutpb'] = 0.33
 p['indpb'] = 0.01
 
 tb = make_tb(p)
 
 res = evorun(tb, p)
 
-logbook = res['logbook']
-
+# keep this part for use of direct to create training data
+# accomplished by redirecting stdout to a file
 print(json.dumps(''.join(res['hof'][0])))
+
+# save res
+res['hofphen'] = res['hof']
+if resfilename:
+    with open(resfilename, 'w') as f:
+        json.dump(res, f)

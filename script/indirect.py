@@ -1,7 +1,7 @@
 from screvaut_evo.tb import make_tb
 from screvaut_evo.dat import STDPARAM, VALID_CHARS
 from screvaut_evo.lib import evorun, clean
-from screvaut_learn.model import Model1
+from screvaut_learn.model import Model2
 import torch
 import json
 from scoop import futures
@@ -10,9 +10,18 @@ import sys
 
 if __name__ == '__main__':
 
-    modelpath = sys.argv[1]
+    # number of generations as first argument
+    ngen = sys.argv[1]
 
-    model = Model1([3000,100,100], [3,3,3], 15)
+    # path to denoising model as second argument
+    modelpath = sys.argv[2]
+
+    # filename to save res (logbook, hof, hofphen)
+    # as the third argument
+    resfilename = sys.argv[3]
+
+
+    model = Model2([9000,100], [3,5], 15)
     model.load_state_dict(torch.load(modelpath))
     model.eval()
 
@@ -29,27 +38,16 @@ if __name__ == '__main__':
         return xs
 
     p = STDPARAM
-    p['ngen'] = 40000
-    p['mutpb'] = 0.4
+    p['ngen'] = ngen
+    p['mutpb'] = 0.33
     p['indpb'] = 0.01
     p['gpmap'] = gpmap
     tb = make_tb(p)
 
     res = evorun(tb, p)
 
-    logbook = res['logbook']
+    # save res
+    res['hofphen'] = list(gmap(res['hof']))
 
-    print(json.dumps(''.join(res['hof'][0])))
-    print(json.dumps(''.join(gmap([res['hof'][0]])[0])))
-
-    gen = logbook.select("gen")
-    fit_maxs = logbook.select("max")
-
-    fig, ax1 = plt.subplots()
-    line1 = ax1.plot(gen, fit_maxs, "b-", label="Maximum Fitness")
-    ax1.set_xlabel("Generation")
-    ax1.set_ylabel("Fitness", color="b")
-    for tl in ax1.get_yticklabels():
-        tl.set_color("b")
-
-    plt.show()
+    with open(resfilename, 'w') as f:
+        json.dump(res, f)
