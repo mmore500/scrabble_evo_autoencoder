@@ -1,0 +1,24 @@
+#!/bin/bash --login
+
+### Define Resources needed:
+#PBS -l walltime=01:30:00
+#PBS -l mem=2gb
+#PBS -l nodes=1:ppn=1
+### Name job
+#PBS -N screvaut_direct
+### Email stuff
+#PBS -M mmore500@msu.edu
+#PBS -m abe
+### Combine and redirect output/error logs
+#PBS -j oe
+### Setup multiple replicates
+#PBS -t 0-99
+
+# load virtual environment
+cd ~
+source myPy/bin/activate
+
+# run experiment
+python ~/scrabble_evo_autoencoder/script/direct.py 2000 /mnt/scratch/mmore500/screvaut/direct_res/${PBS_ARRAYID}-res.json
+
+qstat -f ${PBS_JOBID}
