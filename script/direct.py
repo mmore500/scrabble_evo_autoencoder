@@ -2,16 +2,15 @@ from screvaut_evo.tb import make_tb
 from screvaut_evo.dat import STDPARAM
 from screvaut_evo.lib import evorun
 
+import sys
 import json
 
 # number of generations as first argument
-ngen = sys.argv[1]
+ngen = int(sys.argv[1])
 
 # filename to save res (logbook, hof)
 # optional
-resfilename = sys.argv[2] if len(sys.argv > 2) else None
-
-res_save = 'true' in .lower()
+resfilename = sys.argv[2] if len(sys.argv) > 2) else None
 
 p = STDPARAM
 p['ngen'] = ngen
@@ -27,7 +26,9 @@ res = evorun(tb, p)
 print(json.dumps(''.join(res['hof'][0])))
 
 # save res
-res['hofphen'] = res['hof']
+res['hof'] = [i for i in res['hof']]
+res['hofphen'] = [i for i in res['hof']]
+
 if resfilename:
     with open(resfilename, 'w') as f:
         json.dump(res, f)

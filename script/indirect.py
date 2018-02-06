@@ -8,34 +8,35 @@ from scoop import futures
 import matplotlib.pyplot as plt
 import sys
 
+
+# number of generations as first argument
+ngen = int(sys.argv[1])
+
+# path to denoising model as second argument
+modelpath = sys.argv[2]
+
+# filename to save res (logbook, hof, hofphen)
+# as the third argument
+resfilename = sys.argv[3]
+
+
+model = Model2([9000,100], [3,5], 15)
+model.load_state_dict(torch.load(modelpath))
+model.eval()
+
+reps = 4
+
+view = 15
+
+def myclean(x):
+    return clean(x, model, view)
+
+def gpmap(xs):
+    for __ in range(reps):
+        xs = futures.map(myclean, xs)
+    return xs
+
 if __name__ == '__main__':
-
-    # number of generations as first argument
-    ngen = sys.argv[1]
-
-    # path to denoising model as second argument
-    modelpath = sys.argv[2]
-
-    # filename to save res (logbook, hof, hofphen)
-    # as the third argument
-    resfilename = sys.argv[3]
-
-
-    model = Model2([9000,100], [3,5], 15)
-    model.load_state_dict(torch.load(modelpath))
-    model.eval()
-
-    reps = 4
-
-    view = 15
-
-    def myclean(x):
-        return clean(x, model, view)
-
-    def gpmap(xs):
-        for __ in range(reps):
-            xs = futures.map(myclean, xs)
-        return xs
 
     p = STDPARAM
     p['ngen'] = ngen
@@ -44,9 +45,11 @@ if __name__ == '__main__':
     p['gpmap'] = gpmap
     tb = make_tb(p)
 
+
     res = evorun(tb, p)
 
     # save res
+    res['hof'] = [i for i in res['hof']]
     res['hofphen'] = list(gmap(res['hof']))
 
     with open(resfilename, 'w') as f:

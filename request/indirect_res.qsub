@@ -19,6 +19,6 @@ cd ~
 source myPy/bin/activate
 
 # run experiment
-python -m scoop 2000 /mnt/scratch/mmore500/screvaut/indirect/model4.pt /mnt/scratch/mmore500/screvaut/indirect_res/${PBS_ARRAYID}-res.json
+python -m scoop ~/scrabble_evo_autoencoder/script/indirect.py 2000 /mnt/scratch/mmore500/screvaut/indirect/model4.pt /mnt/scratch/mmore500/screvaut/indirect_res/${PBS_ARRAYID}-res.json
 
 qstat -f ${PBS_JOBID}
