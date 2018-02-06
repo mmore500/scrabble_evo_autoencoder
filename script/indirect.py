@@ -36,21 +36,21 @@ def gpmap(xs):
         xs = futures.map(myclean, xs)
     return xs
 
+
+p = STDPARAM
+p['ngen'] = ngen
+p['mutpb'] = 0.33
+p['indpb'] = 0.01
+p['gpmap'] = gpmap
+tb = make_tb(p)
+
 if __name__ == '__main__':
-
-    p = STDPARAM
-    p['ngen'] = ngen
-    p['mutpb'] = 0.33
-    p['indpb'] = 0.01
-    p['gpmap'] = gpmap
-    tb = make_tb(p)
-
 
     res = evorun(tb, p)
 
     # save res
     res['hof'] = [i for i in res['hof']]
-    res['hofphen'] = list(gmap(res['hof']))
+    res['hofphen'] = list(gpmap(res['hof']))
 
     with open(resfilename, 'w') as f:
         json.dump(res, f)

@@ -12,13 +12,13 @@
 ### Combine and redirect output/error logs
 #PBS -j oe
 ### Setup multiple replicates
-#PBS -t 0-99
+#PBS -t 0-19
 
 # load virtual environment
 cd ~
 source myPy/bin/activate
 
 # run experiment
-python ~/scrabble_evo_autoencoder/script/direct.py 2000 /mnt/scratch/mmore500/screvaut/direct_res/${PBS_ARRAYID}-res.json
+python ~/scrabble_evo_autoencoder/script/direct.py 1000 /mnt/scratch/mmore500/screvaut/direct_res/${PBS_ARRAYID}-res.json
 
 qstat -f ${PBS_JOBID}

@@ -10,7 +10,7 @@ ngen = int(sys.argv[1])
 
 # filename to save res (logbook, hof)
 # optional
-resfilename = sys.argv[2] if len(sys.argv) > 2) else None
+resfilename = sys.argv[2] if len(sys.argv) > 2 else None
 
 p = STDPARAM
 p['ngen'] = ngen
