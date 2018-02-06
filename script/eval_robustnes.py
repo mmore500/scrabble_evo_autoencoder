@@ -82,8 +82,16 @@ cdictblue = {'blue':   ((0.0,  1.0, 1.0),
 
 cmapblue = LinearSegmentedColormap('Red', cdictblue)
 
-ax = sns.kdeplot(indirect_rel_fits[0:1000], indirect_dists[0:1000], n_levels=5, linestyles=['dashed'], legend=True, cmap=cmapred)
-ax = sns.kdeplot(direct_rel_fits[0:1000], direct_dists[0:1000], n_levels=5, legend=True, cmap=cmapblue)
+# KDE takes too long without subset
+idxs = np.random.randint(len(indirect_rel_fits), size=10000)
+
+indirect_rel_fits = np.array(indirect_rel_fits)
+indirect_dists = np.array(indirect_dists)
+direct_rel_fits = np.array(direct_rel_fits)
+direct_dists = np.array(direct_dists)
+
+ax = sns.kdeplot(indirect_rel_fits[idxs], indirect_dists[idxs], n_levels=5, linestyles=['dashed'], legend=True, cmap=cmapred)
+ax = sns.kdeplot(direct_rel_fits[idxs], direct_dists[idxs], n_levels=5, legend=True, cmap=cmapblue)
 
 ax.set_xlim(xlim)
 ax.set_ylim(ylim)
