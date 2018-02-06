@@ -8,7 +8,9 @@ from setuptools import setup, find_packages
 requirements = [
     'numpy',
     'deap',
-    'tqdm'
+    'tqdm',
+    'matplotlib',
+    'seaborn'
 ]
 
 setup_requirements = [

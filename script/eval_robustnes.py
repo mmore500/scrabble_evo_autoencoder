@@ -4,6 +4,11 @@ from tqdm import tqdm
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+import pandas as pd
+
+from matplotlib.colors import LinearSegmentedColormap
+import matplotlib.lines as mlines
 
 from screvaut_evo.plot import plot_es
 
@@ -34,83 +39,107 @@ dictlist = list(zip(*[rep for tr in res for rep in tr]))
 dicts = [d for tr in res for rep in tr for tup in tr for d in tup]
 
 indirect_rel_fits = [d['indirect_rel_fit'] for d in dicts]
-indirect_dists = [d['indirect_dist'] for d in dicts]
+indirect_dists = [d['indirect_rel_dist'] for d in dicts]
 
 direct_rel_fits = [d['direct_rel_fit'] for d in dicts]
 direct_dists = [d['direct_dist'] for d in dicts]
 
 
-directdat = list(zip(direct_dists, direct_rel_fits))
-indirectdat = list(zip(indirect_dists, direct_rel_fits))
+# directdat = list(zip(direct_dists, direct_rel_fits))
+# indirectdat = list(zip(indirect_dists, direct_rel_fits))
+#
+# vmax1 = np.max(plot_es(directdat, "foobar", xlim, ylim, 10000))
+# vmax2 = np.max(plot_es(indirectdat, "foobar", xlim, ylim, 10000))
+#
+# vmax = max(vmax1, vmax2)
+#
+# plot_es(directdat, "Direct Encoding Evolvability Signature", xlim, ylim, vmax)
+#
+# plot_es(indirectdat, "Indirect Encoding Evolvability Signature", xlim, ylim, vmax)
+#
+sns.set()
 
-vmax1 = np.max(plot_es(directdat, "foobar", xlim, ylim, 10000))
-vmax2 = np.max(plot_es(indirectdat, "foobar", xlim, ylim, 10000))
 
-vmax = max(vmax1, vmax2)
+cdictred = {'red':   ((0.0,  1.0, 1.0),
+                   (1.0,  1.0, 1.0)),
 
-plot_es(directdat, "Direct Encoding Evolvability Signature", xlim, ylim, vmax)
+         'green': ((0.0,  0.0, 0.0),
+                   (1.0, 0.0, 0.0)),
 
-plot_es(indirectdat, "Indirect Encoding Evolvability Signature", xlim, ylim, vmax)
+         'blue': ((0.0,  0.0, 0.0),
+                   (1.0, 0.0, 0.0))}
+
+cmapred = LinearSegmentedColormap('Red', cdictred)
+
+cdictblue = {'blue':   ((0.0,  1.0, 1.0),
+                   (1.0,  1.0, 1.0)),
+
+         'green': ((0.0,  0.0, 0.0),
+                   (1.0, 0.0, 0.0)),
+
+         'red': ((0.0,  0.0, 0.0),
+                   (1.0, 0.0, 0.0))}
+
+cmapblue = LinearSegmentedColormap('Red', cdictblue)
+
+ax = sns.kdeplot(indirect_rel_fits[0:1000], indirect_dists[0:1000], n_levels=5, linestyles=['dashed'], legend=True, cmap=cmapred)
+ax = sns.kdeplot(direct_rel_fits[0:1000], direct_dists[0:1000], n_levels=5, legend=True, cmap=cmapblue)
+
+ax.set_xlim(xlim)
+ax.set_ylim(ylim)
+
+plt.xlabel("Fitness Difference")
+plt.ylabel("Phenotypic Distance")
+
+plt.gca().invert_yaxis()
+plt.title("Evolvabilty Signature Kernel Density Estimates")
+
+
+red_line = mlines.Line2D([], [], linestyle='-', color='blue',
+markersize=15, label='Direct Encoding')
+blue_line = mlines.Line2D([], [], linestyle='--', color='red',
+                          markersize=15, label='Denoiser Encoding')
+plt.legend(loc=4,handles=[red_line, blue_line])
+
+
+plt.show()
 
 # plot fitness versus mutational step
-indirect_rel_fits_by_step = [[d['indirect_rel_fit'] for d in t] for t in dictlist]
-indirect_rel_fit_mean_by_step = [np.mean(t) for t in indirect_rel_fits_by_step]
-indirect_rel_fit_std_by_step = np.array([np.std(t) for t in indirect_rel_fits_by_step])
+def df_from_key(key, valkey):
+    return pd.DataFrame.from_records([{
+                'Mutational Step' : istep,
+                'tr' : itr,
+                'rep' : irep,
+                valkey : step[key]
+            }
+        for itr, tr in enumerate(tqdm(res)) for irep, rep in enumerate(tr) for istep, step in enumerate(rep)])
 
-direct_rel_fits_by_step = [[d['direct_rel_fit'] for d in t] for t in dictlist]
-direct_rel_fit_mean_by_step = [np.mean(t) for t in direct_rel_fits_by_step]
-direct_rel_fit_std_by_step = np.array([np.std(t) for t in direct_rel_fits_by_step])
+dfi = df_from_key('indirect_rel_fit', 'Fitness Difference').groupby(['tr', 'Mutational Step'], as_index=False)['Fitness Difference'].mean()
+dfi['Encoding'] = 'Denoiser'
 
-fig, ax1 = plt.subplots()
-line1 = ax1.errorbar(
-        range(len(indirect_rel_fit_mean_by_step)),
-        indirect_rel_fit_mean_by_step,
-        yerr=indirect_rel_fit_std_by_step*2/np.sqrt(len(filenames)),
-        c='b',
-        label="Indirect Encoding"
-    )
-line2 = ax1.errorbar(range(len(direct_rel_fit_mean_by_step)),
-        direct_rel_fit_mean_by_step,
-        yerr=direct_rel_fit_std_by_step*2/np.sqrt(len(filenames)),
-        c='r',
-        label="Direct Encoding"
-    )
-ax1.set_ylabel("Relative Fitness")
-ax1.set_xlabel("Mutational Step")
+dfd = df_from_key('direct_rel_fit', 'Fitness Difference').groupby(['tr', 'Mutational Step'], as_index=False)['Fitness Difference'].mean()
+dfd['Encoding'] = 'Direct'
 
-ax1.legend(handles=[line1, line2])
+sns.set()
+ax = sns.tsplot(data=dfi, time='Mutational Step', unit='tr', value='Fitness Difference', condition='Encoding', ci=95, linestyle='-')
+ax = sns.tsplot(data=dfd, time='Mutational Step', unit='tr', value='Fitness Difference', condition='Encoding', ci=95, linestyle=':', color=sns.color_palette()[1])
+ax.set_xlim(0,100)
+
+plt.title("Fitness Under Repeated Mutation")
 
 plt.show()
 
 
-# plot distance versus mutational step
-indirect_dists_by_step = [[d['indirect_dist'] for d in t] for t in dictlist]
-indirect_dist_mean_by_step = [np.mean(t) for t in indirect_dists_by_step]
-indirect_dist_std_by_step = np.array([np.std(t) for t in indirect_dists_by_step])
+dfi = df_from_key('indirect_rel_dist', 'Phenotypic Distance').groupby(['tr', 'Mutational Step'], as_index=False)['Phenotypic Distance'].mean()
+dfi['Encoding'] = 'Denoiser'
 
-direct_dists_by_step = [[d['direct_dist'] for d in t] for t in dictlist]
-direct_dist_mean_by_step = [np.mean(t) for t in direct_dists_by_step]
-direct_dist_std_by_step = np.array([np.std(t) for t in direct_dists_by_step])
+dfd = df_from_key('direct_dist', 'Phenotypic Distance').groupby(['tr', 'Mutational Step'], as_index=False)['Phenotypic Distance'].mean()
+dfd['Encoding'] = 'Direct'
 
-fig, ax1 = plt.subplots()
-line1 = ax1.errorbar(
-        range(len(indirect_dist_mean_by_step)),
-        indirect_dist_mean_by_step,
-        yerr=indirect_dist_std_by_step*2/np.sqrt(len(filenames)),
-        c='b',
-        label="Indirect Encoding"
-    )
-line2 = ax1.errorbar(
-        range(len(direct_dist_mean_by_step)),
-        direct_dist_mean_by_step,
-        yerr=direct_dist_std_by_step*2/np.sqrt(len(filenames)),
-        c='r',
-        label="Direct Encoding"
-    )
+ax = sns.tsplot(data=dfi, time='Mutational Step', unit='tr', value='Phenotypic Distance', condition='Encoding', ci=95, linestyle='-')
+ax = sns.tsplot(data=dfd, time='Mutational Step', unit='tr', value='Phenotypic Distance', condition='Encoding', ci=95, linestyle=':', color=sns.color_palette()[1])
+ax.set_xlim(0,100)
 
-ax1.set_ylabel("Phenotypic Distance")
-ax1.set_xlabel("Mutational Step")
-
-ax1.legend(handles=[line1, line2])
+plt.title("Phenotypic Divergence Under Repeated Mutation")
 
 plt.show()
