@@ -11,8 +11,8 @@ from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.lines as mlines
 
 
-direct_filenames = glob.glob('/home/mmore500/direct_res/*-res.json')
-indirect_filenames = glob.glob('/home/mmore500/indirect_res/*-res.json')
+direct_filenames = glob.glob('direct_res/*-res.json')
+indirect_filenames = glob.glob('indirect_res/*-res.json')
 
 pages = list()
 
