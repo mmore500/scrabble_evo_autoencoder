@@ -2,11 +2,20 @@
 
 Experiments using autoencoders to learn evolvable encodings for scrabble strings.
 
+## *Learning an Evolvable Genotype-Phenotype Map*
 
-Credits
----------
+Experiments reported in this paper employed [v2.0.0](https://github.com/mmore500/scrabble_evo_autoencoder/tree/v2.0.0) of this software.
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+Find the paper [here](https://mmore500.github.io/research/).
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+Data, figures, and a brief how-to tutorial associated with *Learning an Evolvable Genotype-Phenotype Map* are available [here](https://osf.io/n92c7/).
+
+## Software Authorship
+
+Matthew Andres Moreno
+
+`mmore500@msu.edu`
+
+## Credits
+
+This package was created with Cookiecutter and the `audreyr/cookiecutter-pypackage` project template.
