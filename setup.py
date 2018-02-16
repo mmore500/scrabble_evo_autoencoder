@@ -10,7 +10,8 @@ requirements = [
     'deap',
     'tqdm',
     'matplotlib',
-    'seaborn'
+    'seaborn',
+    'scoop'
 ]
 
 setup_requirements = [
