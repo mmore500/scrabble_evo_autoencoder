@@ -45,18 +45,6 @@ direct_rel_fits = [d['direct_rel_fit'] for d in dicts]
 direct_dists = [d['direct_dist'] for d in dicts]
 
 
-# directdat = list(zip(direct_dists, direct_rel_fits))
-# indirectdat = list(zip(indirect_dists, direct_rel_fits))
-#
-# vmax1 = np.max(plot_es(directdat, "foobar", xlim, ylim, 10000))
-# vmax2 = np.max(plot_es(indirectdat, "foobar", xlim, ylim, 10000))
-#
-# vmax = max(vmax1, vmax2)
-#
-# plot_es(directdat, "Direct Encoding Evolvability Signature", xlim, ylim, vmax)
-#
-# plot_es(indirectdat, "Indirect Encoding Evolvability Signature", xlim, ylim, vmax)
-#
 sns.set()
 
 
