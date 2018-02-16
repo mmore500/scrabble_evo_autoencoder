@@ -4,7 +4,7 @@ Experiments using autoencoders to learn evolvable encodings for scrabble strings
 
 ## *Learning an Evolvable Genotype-Phenotype Map*
 
-Experiments reported in this paper employed [v2.0.0](https://github.com/mmore500/scrabble_evo_autoencoder/tree/v2.0.0) of this software.
+Experiments reported in this paper employed [v2.0.2](https://github.com/mmore500/scrabble_evo_autoencoder/tree/v2.0.2) of this software.
 
 Find the paper [here](https://mmore500.github.io/research/).
 
