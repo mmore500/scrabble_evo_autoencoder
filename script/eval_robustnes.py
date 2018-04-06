@@ -47,28 +47,31 @@ direct_dists = [d['direct_dist'] for d in dicts]
 
 sns.set()
 
+rc = sns.color_palette()[1]
 
-cdictred = {'red':   ((0.0,  1.0, 1.0),
-                   (1.0,  1.0, 1.0)),
+cdictred = {'red':   ((0.0, rc[0],rc[0]),
+                   (1.0, rc[0],rc[0])),
 
-         'green': ((0.0,  0.0, 0.0),
-                   (1.0, 0.0, 0.0)),
+         'green': ((0.0, rc[1],rc[1]),
+                   (1.0, rc[1],rc[1])),
 
-         'blue': ((0.0,  0.0, 0.0),
-                   (1.0, 0.0, 0.0))}
+         'blue': ((0.0,rc[2],rc[2]),
+                   (1.0,rc[2],rc[2]))}
 
 cmapred = LinearSegmentedColormap('Red', cdictred)
 
-cdictblue = {'blue':   ((0.0,  1.0, 1.0),
-                   (1.0,  1.0, 1.0)),
+bc = sns.color_palette()[0]
 
-         'green': ((0.0,  0.0, 0.0),
-                   (1.0, 0.0, 0.0)),
+cdictblue = {'red':   ((0.0, bc[0], bc[0]),
+                   (1.0, bc[0], bc[0])),
 
-         'red': ((0.0,  0.0, 0.0),
-                   (1.0, 0.0, 0.0))}
+         'green': ((0.0, bc[1], bc[1]),
+                   (1.0, bc[1], bc[1])),
 
-cmapblue = LinearSegmentedColormap('Red', cdictblue)
+         'blue': ((0.0, bc[2], bc[2]),
+                   (1.0, bc[2], bc[2]))}
+
+cmapblue = LinearSegmentedColormap('Blue', cdictblue)
 
 # KDE takes too long without subset
 idxs = np.random.randint(len(indirect_rel_fits), size=10000)
@@ -78,8 +81,8 @@ indirect_dists = np.array(indirect_dists)
 direct_rel_fits = np.array(direct_rel_fits)
 direct_dists = np.array(direct_dists)
 
-ax = sns.kdeplot(indirect_rel_fits[idxs], indirect_dists[idxs], n_levels=5, linestyles=['dashed'], legend=True, cmap=cmapred)
-ax = sns.kdeplot(direct_rel_fits[idxs], direct_dists[idxs], n_levels=5, legend=True, cmap=cmapblue)
+ax = sns.kdeplot(indirect_rel_fits[idxs], indirect_dists[idxs], n_levels=5, legend=True, cmap=cmapblue)
+ax = sns.kdeplot(direct_rel_fits[idxs], direct_dists[idxs], n_levels=5,linestyles=['dashed'], legend=True, cmap=cmapred)
 
 ax.set_xlim(xlim)
 ax.set_ylim(ylim)
@@ -90,12 +93,11 @@ plt.ylabel("Phenotypic Distance")
 plt.gca().invert_yaxis()
 plt.title("Evolvabilty Signature Kernel Density Estimates")
 
-
-red_line = mlines.Line2D([], [], linestyle='-', color='blue',
-markersize=15, label='Direct Encoding')
-blue_line = mlines.Line2D([], [], linestyle='--', color='red',
+blue_line = mlines.Line2D([], [], linestyle='-', color=sns.color_palette()[0],
                           markersize=15, label='Denoiser Encoding')
-plt.legend(loc=4,handles=[red_line, blue_line])
+red_line = mlines.Line2D([], [], linestyle='--', color=sns.color_palette()[1],
+                          markersize=15, label='Direct Encoding')
+plt.legend(loc=4,handles=[blue_line, red_line])
 
 
 plt.show()
